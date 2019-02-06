@@ -1,0 +1,27 @@
+version: "3.0"
+services:
+  springboot:
+    build: .
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/samples
+    image: sample-api  
+    container_name: sample-api
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    networks:
+      - docker-net
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+    networks:
+      - docker-net
+networks:
+  docker-net:
+    driver: bridge
